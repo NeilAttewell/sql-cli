@@ -6,6 +6,29 @@ Here's why:
 * When running queries from the command line on a remote Oracle Database, the output is difficult to read.  
   The purpose of this project is to have a Oracle Database cli tool that prints data like the MySQL cli.
 
+### Current Features
+
+1. Load queries from stdin
+2. Load queries from file 
+3. Load queries from console (in interactive mode)
+4. (Console) Multi-line - cursor can be positioned with up, down, left, right arrows for query editing.
+5. (Console) Search through History - Ctrl+R
+6. Write output to stdout
+7. Write output to file
+8. Write output to console (in interactive mode)
+9. Format query results as a table.
+10. Format query results as a pivot table (column name and value - one per line)
+11. Format query results as JSON Array
+12. List aliases
+13. Execute above alias.  eg:  When connecting to oracle, "show tables" lists all tables in the database.
+
+### Future Features
+
+1. Add/Edit/Remove aliases
+2. Support variables  
+
+And more...
+
 
 
 ### Built With
@@ -49,3 +72,9 @@ Here's why:
 ```sh
 sql-client --help
 ```
+
+## Notes
+This project is still very new, so far, I've only spent a couple hours working on it.  
+I've tested it and it works.  
+There is little to no documentation just yet, I need to put in the effort to add this.  
+I need to add unit tests to test things like command line argument parsing + parsing and executing queries/commands
