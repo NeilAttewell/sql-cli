@@ -1,1 +1,2 @@
-# sql-cli
+## Requirements:
+Java 10+
