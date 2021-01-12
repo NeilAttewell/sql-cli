@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import sqlclient.cli.ApplicationState;
+import sqlclient.cli.contracts.IInputSource;
 import sqlclient.cli.contracts.IOutputSink;
 import sqlclient.cli.z_boot.util.cli.CommandLine;
 import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
@@ -26,6 +28,7 @@ import sqlclient.cli.z_boot.util.cli.CommandLineOption;
 public class ConnectionMysqlConfiguration {
 	@Autowired private CommandLine commandLine;
 	@Autowired private IOutputSink sink;
+	@Autowired private ApplicationState state;
 
 	@Bean
 	public String dbType() {
@@ -57,8 +60,10 @@ public class ConnectionMysqlConfiguration {
 		properties.put("password", password);
 		Connection connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + (StringUtils.isBlank(database) ? "" : ("/" + database)),properties);
 		connection.setAutoCommit(false);
-		this.sink.printInfo("Connection to Oracle established");
-		
+		this.sink.printInfo("Connection to MySQL established");
+		if(this.commandLine.getValue("db") != null) {
+			this.state.setInputPromptPrefix(this.commandLine.getValue("db"));
+		}
 		return connection;
 	}
 	public static void addCommandLineArguments(CommandLineBuilder builder){

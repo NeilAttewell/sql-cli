@@ -2,6 +2,7 @@ package sqlclient.cli.z_boot.util.cli;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Neil Attewell
@@ -56,7 +57,10 @@ public class CommandLineOptionGroup {
 			return this;
 		}
 		public OptionBuilder withOption() {
-			return new OptionBuilder(this);
+			return new OptionBuilder(this, this.options::add);
+		}
+		public OptionBuilder withConditionOption() {
+			return new OptionBuilder(this, item -> this.conditionOption = item);
 		}
 		public OptionGroupBuilder withConditionOption(CommandLineOption conditionOption) {
 			this.conditionOption = conditionOption;
@@ -80,13 +84,15 @@ public class CommandLineOptionGroup {
 	}
 	public static class OptionBuilder{
 		private final OptionGroupBuilder builder;
+		private final Consumer<CommandLineOption> consumer;
 		private Character shortName;
 		private String longName;
 		private String description;
 		private Boolean hasValue;
 
-		public OptionBuilder(OptionGroupBuilder builder) {
+		private OptionBuilder(OptionGroupBuilder builder, Consumer<CommandLineOption> consumer) {
 			this.builder=builder;
+			this.consumer=consumer;
 		}
 		public OptionBuilder withShortName(Character shortName) {
 			this.shortName = shortName;
@@ -111,10 +117,7 @@ public class CommandLineOptionGroup {
 			if(this.hasValue == null) {
 				throw new IllegalArgumentException("Has value is required");
 			}
-			if(this.description == null) {
-				throw new IllegalArgumentException("Description is required");
-			}
-			this.builder.withOption(new CommandLineOption(this.shortName, this.longName, this.description, this.hasValue, true));
+			this.consumer.accept(new CommandLineOption(this.shortName, this.longName, this.description, this.hasValue, true));
 			return this.builder;
 		}
 	}

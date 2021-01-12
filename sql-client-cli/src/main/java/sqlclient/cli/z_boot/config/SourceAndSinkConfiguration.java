@@ -71,13 +71,13 @@ public class SourceAndSinkConfiguration {
 	}
 
 	public static InputModeEnum getInputMode(CommandLine commandLine) {
-		if(commandLine.hasValue('i')) {
+		if(commandLine.isFound('i')) {
 			return InputModeEnum.StandardIn;
 		}
-		if(commandLine.hasValue("script")) {
+		if(commandLine.isFound("script")) {
 			return InputModeEnum.Script;
 		}
-		if(commandLine.hasValue("execute")) {
+		if(commandLine.isFound("execute")) {
 			return InputModeEnum.Execute;
 		}
 		return InputModeEnum.ConsoleIn;
@@ -87,7 +87,7 @@ public class SourceAndSinkConfiguration {
 		if(inputMode == InputModeEnum.ConsoleIn) {
 			return OutputModeEnum.ConsoleOut;
 		}
-		if(commandLine.hasValue('o')) {
+		if(commandLine.isFound('o')) {
 			if(StringUtils.equalsIgnoreCase(commandLine.getValue('o'), "-")) {
 				return OutputModeEnum.StandardOut;
 			}

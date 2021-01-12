@@ -48,7 +48,7 @@ public class CommandLine {
 				.findFirst()
 				.orElse(null);
 	}
-	private boolean hasValue(Predicate<CommandLineOption> predicate) {
+	private boolean isFound(Predicate<CommandLineOption> predicate) {
 		return getArgument(predicate).isPresent();
 	}
 	public List<CommandLineOptionGroup> getActiveGroups(){
@@ -71,8 +71,8 @@ public class CommandLine {
 		}
 		return defaultValue;
 	}
-	public boolean hasValue(char name) {
-		return hasValue(item -> findByShortName(item, name));
+	public boolean isFound(char name) {
+		return isFound(item -> findByShortName(item, name));
 	}
 
 	//============================================================================================================
@@ -91,8 +91,8 @@ public class CommandLine {
 		}
 		return defaultValue;
 	}
-	public boolean hasValue(String name) {
-		return hasValue(item -> findByLongName(item, name));
+	public boolean isFound(String name) {
+		return isFound(item -> findByLongName(item, name));
 	}
 
 
@@ -109,7 +109,8 @@ public class CommandLine {
 	public boolean isPrintHelp() {
 		return this.helpArgument != null;
 	}
-	public void printHelp(String runCommand, String footer) {
+	public void printHelp(String footer) {
+		System.out.println("SQL command-line tool.  ");
 		List<Tuple3<String, Integer, String>> lines = new ArrayList<>();
 		this.allOptions
 		.stream()
@@ -134,6 +135,7 @@ public class CommandLine {
 		lines.forEach(item -> {
 			System.out.println(StringUtils.rightPad(item._1, maxLength, " ") + " " + item._3);
 		});
+		System.out.println(footer);
 	}
 	
 	private String buildHelpLine(CommandLineOption option, int indent) {

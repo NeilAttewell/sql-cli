@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationState {
 	private boolean autoCommit;
 	private int updateCount;
+	private String inputPromptPrefix;
 	
 	public boolean isAutoCommit() {
 		return autoCommit;
@@ -21,5 +22,11 @@ public class ApplicationState {
 	}
 	public void setUpdateCount(int updateCount) {
 		this.updateCount = updateCount;
+	}
+	public String getInputPromptPrefix() {
+		return inputPromptPrefix;
+	}
+	public void setInputPromptPrefix(String inputPromptPrefix) {
+		this.inputPromptPrefix = inputPromptPrefix;
 	}
 }

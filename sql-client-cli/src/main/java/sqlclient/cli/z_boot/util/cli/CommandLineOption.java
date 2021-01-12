@@ -74,9 +74,6 @@ public class CommandLineOption{
 			if(this.hasValue == null) {
 				throw new IllegalArgumentException("Has value is required");
 			}
-			if(this.description == null) {
-				throw new IllegalArgumentException("Description is required");
-			}
 			this.commandLineBuilder.addOption(new CommandLineOption(this.shortName, this.longName, this.description, this.hasValue, true));
 			return this.commandLineBuilder;
 		}

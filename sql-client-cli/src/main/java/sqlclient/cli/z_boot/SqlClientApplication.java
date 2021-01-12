@@ -58,11 +58,11 @@ public class SqlClientApplication implements CommandLineRunner{
 
 
 			CommandLine commandLine = builder.build();
-			if(commandLine.hasValue("debug")) {
+			if(commandLine.isFound("debug")) {
 				System.out.println(commandLine);				
 			}
 			if(commandLine.isPrintHelp()) {
-				commandLine.printHelp("java -jar sqlclient.jar", "Written by Neil Attewell");
+				commandLine.printHelp("Written by Neil Attewell");
 				return;
 			}
 			

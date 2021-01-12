@@ -13,12 +13,12 @@ import sqlclient.cli.domain.Query;
  */
 public abstract class AbstractCommandExecutor implements IInputExecutor, ICommand{
 	@Autowired private SpecialCharacterRegistry characterRegistry;
-	
+
 	@Override
 	public boolean isCommand(Query query) {
 		for(String delimiter : this.characterRegistry.getEnabledDelimiters()) {
-			String tmp = StringUtils.trim(query.getQuery()) + delimiter;
-			if(StringUtils.equalsIgnoreCase(tmp, getCommand())) {
+			String tmp = StringUtils.trim(query.getQuery());
+			if(StringUtils.equalsIgnoreCase(tmp, getCommand() + delimiter)) {
 				return true;
 			}
 		}

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import io.vavr.Tuple;
@@ -24,6 +25,10 @@ public class CommandLineBuilder {
 	private List<CommandLineOptionGroup> optionGroups = new ArrayList<>();
 	private String[] arguments = new String[0];
 
+	public static CommandLineBuilder builder() {
+		return new CommandLineBuilder();
+	}
+	
 	public CommandLineBuilder addHelpOption(CommandLineOption option) {
 		this.helpOption = option;
 		this.options.add(option);
@@ -63,17 +68,7 @@ public class CommandLineBuilder {
 		return this;
 	}
 	public CommandLineBuilder addArgument(String argument) {
-		if(this.arguments == null) {
-			this.arguments = new String[] {argument};
-			return this;
-		}
-		
-		String[] arguments = new String[this.arguments.length+1];
-		for(int i = 0 ; i < this.arguments.length ; i++) {
-			arguments[i] = this.arguments[i];
-		}
-		arguments[arguments.length-1] = argument;
-		this.arguments=arguments;
+		this.arguments = (String[]) ArrayUtils.add(this.arguments, argument);
 		return this;
 	}
 
@@ -98,17 +93,21 @@ public class CommandLineBuilder {
 	}
 	
 	
-	
 	public CommandLine build() {
-		Tuple2<List<CommandLineArgument>, List<CommandLineOptionGroup>> result = parse(this.arguments, this.options, this.optionGroups);
+		return build(null);
+	}
+	public CommandLine build(String[] arguments) {
+		arguments = (String[]) ArrayUtils.addAll(this.arguments, arguments);
+		
+		Tuple2<List<CommandLineArgument>, List<CommandLineOptionGroup>> result = parse(arguments, this.options, this.optionGroups);
 
 		if(this.propertiesOption != null) {
 			CommandLineArgument properties = result._1.stream().filter(item -> item.getOption() == this.propertiesOption).findFirst().orElse(null);
 			if(properties != null) {
-				List<String> arguments = new ArrayList<>();
-				arguments.addAll(Arrays.asList(this.arguments));
-				arguments.addAll(loadProperties(properties.getValues()));
-				result = parse(arguments.toArray(new String[0]), this.options, this.optionGroups);
+				List<String> argumentList = new ArrayList<>();
+				argumentList.addAll(Arrays.asList(arguments));
+				argumentList.addAll(loadProperties(properties.getValues()));
+				result = parse(argumentList.toArray(new String[0]), this.options, this.optionGroups);
 			}
 		}
 		
@@ -189,8 +188,14 @@ public class CommandLineBuilder {
 							continue;
 						}
 						values = createListIfNull(values);
-						values.add(arguments[i+1]);
-						i+=1;
+						for(int j = i+1 ; j < arguments.length ; j++) {
+							if(!StringUtils.startsWith(arguments[j], "-")) {
+								values.add(arguments[j]);
+								i++;
+								continue;
+							}
+							break;
+						}
 						continue;
 					}
 					if(option.isHasValue() && StringUtils.startsWith(nameArgument, "--" + option.getLongName() + "=")) {
@@ -211,8 +216,14 @@ public class CommandLineBuilder {
 							continue;
 						}
 						values = createListIfNull(values);
-						values.add(arguments[i+1]);
-						i+=1;
+						for(int j = i+1 ; j < arguments.length ; j++) {
+							if(!StringUtils.startsWith(arguments[j], "-")) {
+								values.add(arguments[j]);
+								i++;
+								continue;
+							}
+							break;
+						}
 						continue;
 					}
 					if(option.isHasValue() && StringUtils.startsWith(nameArgument, "-" + option.getShortName() + "=")) {
