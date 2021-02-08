@@ -65,7 +65,6 @@ public class ConnectionOracleConfiguration {
 		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@" + hostname + ":" + port + "/" + sid,properties);
 		connection.setAutoCommit(false);
 		this.sink.printInfo("Connection to Oracle established");
-
 		this.aliasRegistry.addFixedAlias(this.characterRegistry, "show tables", "select table_name from user_tables order by 1");
 		return connection;
 	}

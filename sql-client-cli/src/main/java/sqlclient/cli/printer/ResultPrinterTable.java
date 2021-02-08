@@ -38,7 +38,7 @@ public class ResultPrinterTable implements IResultSetPrinter{
 
 		List<Tuple2<Integer,String>> columnNames = IntStream.range(1, resultSet.getColumnCount() + 1)
 				.mapToObj(item -> {
-					String name = getColumnName(resultSet, item);
+					String name = expand(getColumnName(resultSet, item));
 					columnWidths.put(item, name.length());
 					return Tuple.of(item,name);
 				})
@@ -49,7 +49,7 @@ public class ResultPrinterTable implements IResultSetPrinter{
 		while (resultSet.next()) {
 			records.add(columnNames.stream()
 					.map(item -> {
-						String value = getColumnObject(resultSet, item._1, "NULL");
+						String value = expand(getColumnObject(resultSet, item._1, "NULL"));
 						columnWidths.put(item._1, Math.max(columnWidths.get(item._1), value.length()));
 						return Tuple.of(item._1, value);
 					})
@@ -96,5 +96,35 @@ public class ResultPrinterTable implements IResultSetPrinter{
 		} catch (SQLException e) {
 			throw new IllegalArgumentException("invalid index: " + index, e);
 		}
+	}
+	private static String expand(String input) {
+		if(StringUtils.isBlank(input)) {
+			return input;
+		}
+		if(!StringUtils.contains(input, "\t")) {
+			return input;
+		}
+		
+		final int tabSize=4;
+	    StringBuilder out = new StringBuilder();
+	    int col = 0;
+	    for (int i = 0; i < input.length(); i++) {
+	        char c = input.charAt(i);
+	        switch (c) {
+	            case '\n' :
+	                col = 0;
+	                out.append(c);
+	                break;
+	            case '\t' :
+	                out.append(StringUtils.leftPad("",tabSize - col % tabSize));
+	                col += tabSize - col % tabSize;
+	                break;
+	            default :
+	                col++;
+	                out.append(c);
+	                break;
+	        }
+	    }
+	    return out.toString();
 	}
 }

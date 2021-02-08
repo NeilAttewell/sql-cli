@@ -7,6 +7,8 @@ import sqlclient.cli.Application;
 import sqlclient.cli.ApplicationState;
 import sqlclient.cli.QueryAliasRegistry;
 import sqlclient.cli.SpecialCharacterRegistry;
+import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
+import sqlclient.cli.z_boot.util.cli.CommandLineOption;
 
 /**
  * @author Neil Attewell
@@ -28,5 +30,9 @@ public class ServiceConfiguration {
 	@Bean
 	public ApplicationState applicationState() {
 		return new ApplicationState();
+	}
+
+	public static void addCommandLineArguments(CommandLineBuilder builder){
+		builder.addOption(new CommandLineOption('a', "alias", "Location of alias file.", true, true));
 	}
 }

@@ -17,6 +17,7 @@ import sqlclient.cli.Application;
 import sqlclient.cli.z_boot.config.ConnectionMysqlConfiguration;
 import sqlclient.cli.z_boot.config.ConnectionOracleConfiguration;
 import sqlclient.cli.z_boot.config.ConsoleConfiguration;
+import sqlclient.cli.z_boot.config.ServiceConfiguration;
 import sqlclient.cli.z_boot.config.SourceAndSinkConfiguration;
 import sqlclient.cli.z_boot.util.cli.CommandLine;
 import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
@@ -30,7 +31,7 @@ import sqlclient.cli.z_boot.util.cli.CommandLineOptionGroup;
 @EnableConfigurationProperties
 @ComponentScan(basePackageClasses= {SourceAndSinkConfiguration.class})
 public class SqlClientApplication implements CommandLineRunner{
-	private static CommandLine commandLine;
+	protected static CommandLine commandLine;
 	@Autowired private Application application;
 	
 	@Bean
@@ -53,20 +54,26 @@ public class SqlClientApplication implements CommandLineRunner{
 			builder.addPropertiesOption(new CommandLineOption(null, "properties", "Load arguments from file/s", true, true));
 			SourceAndSinkConfiguration.addCommandLineArguments(builder);
 			ConsoleConfiguration.addCommandLineArguments(builder);
+			ServiceConfiguration.addCommandLineArguments(builder);
+			
 			ConnectionOracleConfiguration.addCommandLineArguments(builder);
 			ConnectionMysqlConfiguration.addCommandLineArguments(builder);
 
 
 			CommandLine commandLine = builder.build();
+			SqlClientApplication.commandLine=commandLine;
+			
 			if(commandLine.isFound("debug")) {
 				System.out.println(commandLine);				
 			}
 			if(commandLine.isPrintHelp()) {
-				commandLine.printHelp("Written by Neil Attewell");
+				SqlClientApplication.commandLine=commandLine;
+				SpringApplication springApp = new SpringApplication(SqlClientApplicationHelp.class);
+				springApp.setLogStartupInfo(false);
+				springApp.run(args);
 				return;
 			}
 			
-			SqlClientApplication.commandLine=commandLine;
 			
 			List<String> profiles = new ArrayList<>();
 			profiles.add(SourceAndSinkConfiguration.getInputMode(commandLine).toProfile());
@@ -80,9 +87,7 @@ public class SqlClientApplication implements CommandLineRunner{
 			springApp.setAdditionalProfiles(profiles.stream().filter(Objects::nonNull).collect(Collectors.toList()).toArray(new String[0]));
 			springApp.setLogStartupInfo(false);
 			springApp.run(args);
-//		}catch (UnsatisfiedDependencyException e) {
 		}catch (Throwable e) {
-//			e.printStackTrace();
 			while(e.getCause() != null) {
 				e = e.getCause();
 			}
