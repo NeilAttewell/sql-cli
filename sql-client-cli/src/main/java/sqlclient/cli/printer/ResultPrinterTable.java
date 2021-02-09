@@ -63,7 +63,6 @@ public class ResultPrinterTable implements IResultSetPrinter{
 		this.outputSink.writeLine(buildLine(columnWidths));
 		this.outputSink.printInfo(records.size() + " row in set ("+ queryTime +" ms)");
 		this.outputSink.printInfo("");
-		
 	}
 
 	private String buildLine(Map<Integer, Integer> columns) {

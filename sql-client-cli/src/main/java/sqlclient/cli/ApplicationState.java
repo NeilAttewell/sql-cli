@@ -10,6 +10,9 @@ public class ApplicationState {
 	private boolean autoCommit;
 	private int updateCount;
 	private String inputPromptPrefix;
+	private final VariableStoreUser variableStoreUser = new VariableStoreUser();
+	private final VariableStoreSystem variableStoreSystem = new VariableStoreSystem();
+	private final VariableStoreLastQueryResult variableStoreLastQueryResult= new VariableStoreLastQueryResult();
 	
 	public boolean isAutoCommit() {
 		return autoCommit;
@@ -28,5 +31,14 @@ public class ApplicationState {
 	}
 	public void setInputPromptPrefix(String inputPromptPrefix) {
 		this.inputPromptPrefix = inputPromptPrefix;
+	}
+	public VariableStoreSystem getVariableStoreSystem() {
+		return variableStoreSystem;
+	}
+	public VariableStoreUser getVariableStoreUser() {
+		return variableStoreUser;
+	}
+	public VariableStoreLastQueryResult getVariableStoreLastQueryResult() {
+		return variableStoreLastQueryResult;
 	}
 }

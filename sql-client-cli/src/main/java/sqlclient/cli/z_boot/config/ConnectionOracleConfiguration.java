@@ -62,9 +62,10 @@ public class ConnectionOracleConfiguration {
 		Properties properties = new Properties();
 		properties.put("user", username);
 		properties.put("password", password);
+		long startTime=System.currentTimeMillis();
 		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@" + hostname + ":" + port + "/" + sid,properties);
 		connection.setAutoCommit(false);
-		this.sink.printInfo("Connection to Oracle established");
+		this.sink.printInfo("Connection to Oracle established.  Took: " + (System.currentTimeMillis()-startTime));
 
 		this.aliasRegistry.addFixedAlias(this.characterRegistry, "show tables", "select table_name from user_tables order by 1");
 		return connection;

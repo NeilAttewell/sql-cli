@@ -1,5 +1,7 @@
 package sqlclient.cli.z_boot;
 
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import sqlclient.cli.Application;
+import sqlclient.cli.contracts.IOutputSink;
 import sqlclient.cli.z_boot.config.ConnectionMysqlConfiguration;
 import sqlclient.cli.z_boot.config.ConnectionOracleConfiguration;
 import sqlclient.cli.z_boot.config.ConsoleConfiguration;
@@ -31,7 +34,10 @@ import sqlclient.cli.z_boot.util.cli.CommandLineOptionGroup;
 @ComponentScan(basePackageClasses= {SourceAndSinkConfiguration.class})
 public class SqlClientApplication implements CommandLineRunner{
 	private static CommandLine commandLine;
+	private static LocalTime startTime;
+
 	@Autowired private Application application;
+	@Autowired private IOutputSink outputSink;
 	
 	@Bean
 	public CommandLine commandLine() {
@@ -40,11 +46,16 @@ public class SqlClientApplication implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
+		long startupTime = ChronoUnit.MILLIS.between(this.startTime, LocalTime.now());
+		this.outputSink.printInfo("Startup time: "+startupTime);
+		this.outputSink.printInfo("");
 		this.application.run();
 	}
 
 	public static void main(String[] args){
 		try {
+			SqlClientApplication.startTime = LocalTime.now();
+			
 			CommandLineBuilder builder = new CommandLineBuilder();
 			builder.withArguments(args);
 			builder.addArgument("-t=oracle");
@@ -80,9 +91,7 @@ public class SqlClientApplication implements CommandLineRunner{
 			springApp.setAdditionalProfiles(profiles.stream().filter(Objects::nonNull).collect(Collectors.toList()).toArray(new String[0]));
 			springApp.setLogStartupInfo(false);
 			springApp.run(args);
-//		}catch (UnsatisfiedDependencyException e) {
 		}catch (Throwable e) {
-//			e.printStackTrace();
 			while(e.getCause() != null) {
 				e = e.getCause();
 			}
