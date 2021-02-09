@@ -20,6 +20,7 @@ import sqlclient.cli.contracts.IOutputSink;
 import sqlclient.cli.z_boot.config.ConnectionMysqlConfiguration;
 import sqlclient.cli.z_boot.config.ConnectionOracleConfiguration;
 import sqlclient.cli.z_boot.config.ConsoleConfiguration;
+import sqlclient.cli.z_boot.config.ServiceConfiguration;
 import sqlclient.cli.z_boot.config.SourceAndSinkConfiguration;
 import sqlclient.cli.z_boot.util.cli.CommandLine;
 import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
@@ -64,20 +65,26 @@ public class SqlClientApplication implements CommandLineRunner{
 			builder.addPropertiesOption(new CommandLineOption(null, "properties", "Load arguments from file/s", true, true));
 			SourceAndSinkConfiguration.addCommandLineArguments(builder);
 			ConsoleConfiguration.addCommandLineArguments(builder);
+			ServiceConfiguration.addCommandLineArguments(builder);
+			
 			ConnectionOracleConfiguration.addCommandLineArguments(builder);
 			ConnectionMysqlConfiguration.addCommandLineArguments(builder);
 
 
 			CommandLine commandLine = builder.build();
+			SqlClientApplication.commandLine=commandLine;
+			
 			if(commandLine.isFound("debug")) {
 				System.out.println(commandLine);				
 			}
 			if(commandLine.isPrintHelp()) {
-				commandLine.printHelp("Written by Neil Attewell");
+				SqlClientApplication.commandLine=commandLine;
+				SpringApplication springApp = new SpringApplication(SqlClientApplicationHelp.class);
+				springApp.setLogStartupInfo(false);
+				springApp.run(args);
 				return;
 			}
 			
-			SqlClientApplication.commandLine=commandLine;
 			
 			List<String> profiles = new ArrayList<>();
 			profiles.add(SourceAndSinkConfiguration.getInputMode(commandLine).toProfile());
