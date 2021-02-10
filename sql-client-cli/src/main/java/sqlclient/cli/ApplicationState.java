@@ -1,5 +1,6 @@
 package sqlclient.cli;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -7,6 +8,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ApplicationState {
+	@Autowired private VariableStoreUser variableStoreUser;
+	@Autowired private VariableStoreSystem variableStoreSystem;
+	@Autowired private VariableStoreLastQueryResult variableStoreLastQueryResult;
 	private boolean autoCommit;
 	private int updateCount;
 	private String inputPromptPrefix;
@@ -28,5 +32,14 @@ public class ApplicationState {
 	}
 	public void setInputPromptPrefix(String inputPromptPrefix) {
 		this.inputPromptPrefix = inputPromptPrefix;
+	}
+	public VariableStoreSystem getVariableStoreSystem() {
+		return variableStoreSystem;
+	}
+	public VariableStoreUser getVariableStoreUser() {
+		return variableStoreUser;
+	}
+	public VariableStoreLastQueryResult getVariableStoreLastQueryResult() {
+		return variableStoreLastQueryResult;
 	}
 }

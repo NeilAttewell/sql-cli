@@ -19,7 +19,6 @@ import sqlclient.cli.domain.Query;
 @Component
 public class InputExecutorUse implements IInputExecutor, ICommand{
 	private final static Pattern PATTERN = Pattern.compile("\\s*use\\s+(?<databaseName>[a-zA-Z_]+\\w*)\\s*",Pattern.CASE_INSENSITIVE);
-	@Autowired private InputExecutorQuery executor;
 	@Autowired private ApplicationState state;
 	@Autowired private Connection connection;
 

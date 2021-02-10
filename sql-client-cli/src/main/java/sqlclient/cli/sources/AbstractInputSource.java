@@ -14,6 +14,7 @@ import sqlclient.cli.SpecialCharacterRegistry;
 import sqlclient.cli.contracts.ICommand;
 import sqlclient.cli.contracts.IInputSource;
 import sqlclient.cli.domain.Query;
+import sqlclient.cli.domain.QueryPart;
 import sqlclient.cli.z_boot.util.SqlParserUtils;
 
 /**
@@ -53,7 +54,7 @@ public abstract class AbstractInputSource implements IInputSource{
 		for(int i = 0 ; i < queries.size(); i++) {
 			Query query = queries.get(i);
 			if(i == 0 && this.partialQuery != null) {
-				List<String> parts = new ArrayList<>();
+				List<QueryPart> parts = new ArrayList<>();
 				parts.addAll(this.partialQuery.getParts());
 				parts.addAll(query.getParts());
 				this.queries.add(new Query(parts, query.getDelimiter()));

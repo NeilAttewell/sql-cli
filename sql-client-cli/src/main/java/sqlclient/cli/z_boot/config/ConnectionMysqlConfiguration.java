@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import sqlclient.cli.ApplicationState;
-import sqlclient.cli.contracts.IInputSource;
 import sqlclient.cli.contracts.IOutputSink;
 import sqlclient.cli.z_boot.util.cli.CommandLine;
 import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
@@ -55,17 +54,21 @@ public class ConnectionMysqlConfiguration {
 			throw new IllegalArgumentException("Missing password");
 		}
 
+		long startTime=System.currentTimeMillis();
 		Properties properties = new Properties();
 		properties.put("user", username);
 		properties.put("password", password);
 		Connection connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + (StringUtils.isBlank(database) ? "" : ("/" + database)),properties);
 		connection.setAutoCommit(false);
-		this.sink.printInfo("Connection to MySQL established");
+		
+		this.sink.printInfo("Connection to MySQL established.  Took: " + (System.currentTimeMillis()-startTime));
+		
 		if(this.commandLine.getValue("db") != null) {
 			this.state.setInputPromptPrefix(this.commandLine.getValue("db"));
 		}
 		return connection;
 	}
+	
 	public static void addCommandLineArguments(CommandLineBuilder builder){
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");

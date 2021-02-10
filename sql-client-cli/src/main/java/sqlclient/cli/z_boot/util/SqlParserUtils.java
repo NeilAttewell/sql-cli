@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import sqlclient.cli.SpecialCharacterRegistry;
 import sqlclient.cli.domain.Query;
+import sqlclient.cli.domain.QueryPart;
 
 /**
  * @author Neil Attewell
@@ -16,18 +17,18 @@ public class SqlParserUtils {
 		List<Query> out = new  ArrayList<>();
 		String currentPart = "";
 		String currentWrapper = null;
-		List<String> parts = new ArrayList<>();
+		List<QueryPart> parts = new ArrayList<>();
 		for(int i = 0 ; i < input.length() ; i++) {
 			String wrapper = getIfWrapperAtPosition(input, i, currentWrapper, registry);
 			if(currentWrapper != null && wrapper != null) {
 				currentPart += (char) input.charAt(i);
 				currentWrapper=null;
-				parts.add(currentPart);
+				parts.add(new QueryPart(currentPart, true));
 				currentPart = "";
 				continue;
 			}
 			if(wrapper != null) {
-				parts.add(currentPart);
+				parts.add(new QueryPart(currentPart, false));
 				currentPart = "";
 
 				currentWrapper = wrapper;
@@ -43,7 +44,7 @@ public class SqlParserUtils {
 			if(currentWrapper != null) {
 				continue;
 			}
-			parts.add(StringUtils.substringBeforeLast(currentPart, split));
+			parts.add(new QueryPart(StringUtils.substringBeforeLast(currentPart, split),false));
 			out.add(new Query(parts,split));
 			input = StringUtils.substring(input, i+1);
 			i=-1;
@@ -52,7 +53,7 @@ public class SqlParserUtils {
 		}
 		if(StringUtils.isNotBlank(currentPart)) {
 			String split = getIfAtSplit(currentPart, currentPart.length()-1, registry);
-			parts.add(StringUtils.substringBeforeLast(currentPart, split));
+			parts.add(new QueryPart(StringUtils.substringBeforeLast(currentPart, split),false));
 		}
 		if(!parts.isEmpty()) {
 			out.add(new Query(parts,null));
