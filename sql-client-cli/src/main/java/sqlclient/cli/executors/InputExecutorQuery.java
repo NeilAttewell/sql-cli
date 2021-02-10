@@ -133,7 +133,7 @@ public class InputExecutorQuery implements IInputExecutor{
 				String search = "{{" + name + "}}";
 				int index;
 				while((index = StringUtils.indexOfIgnoreCase(sql, search)) != -1) {
-					search = StringUtils.substring(sql, index, search.length());
+					search = StringUtils.substring(sql, index, index+search.length());
 					sql = StringUtils.replaceOnce(sql, search, store.get(name));
 				}
 			}

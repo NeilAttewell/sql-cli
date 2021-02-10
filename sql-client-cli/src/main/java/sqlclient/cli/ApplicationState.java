@@ -1,5 +1,6 @@
 package sqlclient.cli;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -7,12 +8,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ApplicationState {
+	@Autowired private VariableStoreUser variableStoreUser;
+	@Autowired private VariableStoreSystem variableStoreSystem;
+	@Autowired private VariableStoreLastQueryResult variableStoreLastQueryResult;
 	private boolean autoCommit;
 	private int updateCount;
 	private String inputPromptPrefix;
-	private final VariableStoreUser variableStoreUser = new VariableStoreUser();
-	private final VariableStoreSystem variableStoreSystem = new VariableStoreSystem();
-	private final VariableStoreLastQueryResult variableStoreLastQueryResult= new VariableStoreLastQueryResult();
 	
 	public boolean isAutoCommit() {
 		return autoCommit;

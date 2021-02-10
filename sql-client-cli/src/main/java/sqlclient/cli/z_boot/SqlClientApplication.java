@@ -1,10 +1,12 @@
 package sqlclient.cli.z_boot;
 
+import java.io.InputStream;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -34,7 +37,7 @@ import sqlclient.cli.z_boot.util.cli.CommandLineOptionGroup;
 @EnableConfigurationProperties
 @ComponentScan(basePackageClasses= {SourceAndSinkConfiguration.class})
 public class SqlClientApplication implements CommandLineRunner{
-	private static CommandLine commandLine;
+	protected static CommandLine commandLine;
 	private static LocalTime startTime;
 
 	@Autowired private Application application;
@@ -78,10 +81,20 @@ public class SqlClientApplication implements CommandLineRunner{
 				System.out.println(commandLine);				
 			}
 			if(commandLine.isPrintHelp()) {
-				SqlClientApplication.commandLine=commandLine;
-				SpringApplication springApp = new SpringApplication(SqlClientApplicationHelp.class);
-				springApp.setLogStartupInfo(false);
-				springApp.run(args);
+				InputStream inputStream = SqlClientApplication.class.getClassLoader().getResourceAsStream("META-INF/build-info.properties");
+				Properties sourceProperties = new Properties();
+				sourceProperties.load(inputStream);
+				inputStream.close();
+
+				String prefix = "build.";
+				Properties targetProperties = new Properties();
+				for (String key : sourceProperties.stringPropertyNames()) {
+					if (key.startsWith(prefix)) {
+						targetProperties.put(key.substring(prefix.length()), sourceProperties.get(key));
+					}
+				}
+				BuildProperties buildProperties = new BuildProperties(targetProperties);
+				commandLine.printHelp("Version: " + buildProperties.getVersion() + "\nWritten by Neil Attewell");
 				return;
 			}
 			
@@ -102,6 +115,7 @@ public class SqlClientApplication implements CommandLineRunner{
 			while(e.getCause() != null) {
 				e = e.getCause();
 			}
+			e.printStackTrace();
 			System.err.println(e.getMessage());
 		}
 	}

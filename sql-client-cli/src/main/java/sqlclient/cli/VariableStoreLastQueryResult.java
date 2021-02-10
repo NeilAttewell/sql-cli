@@ -6,9 +6,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
 import sqlclient.cli.contracts.IVariableStore;
 
+@Component
 public class VariableStoreLastQueryResult implements IVariableStore{
 	private Map<String, String> variables = new HashMap<>();
 

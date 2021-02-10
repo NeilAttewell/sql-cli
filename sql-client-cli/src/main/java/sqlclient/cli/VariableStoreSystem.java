@@ -6,9 +6,11 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple2;
 
+@Component
 public class VariableStoreSystem {
 	private Map<String, Tuple2<Supplier<String>, Consumer<String>>> functions;
 
