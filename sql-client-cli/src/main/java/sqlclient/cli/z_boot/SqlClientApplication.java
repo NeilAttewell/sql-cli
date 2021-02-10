@@ -64,7 +64,7 @@ public class SqlClientApplication implements CommandLineRunner{
 			builder.withArguments(args);
 			builder.addArgument("-t=oracle");
 			builder.addOption(new CommandLineOption(null, "debug", "Print debug info", false, false));
-			builder.addHelpOption(new CommandLineOption(null, "help", "Prints this message", false, true));
+			builder.addHelpOption(new CommandLineOption(null, "help", "Prints this message", true, true));
 			builder.addPropertiesOption(new CommandLineOption(null, "properties", "Load arguments from file/s", true, true));
 			SourceAndSinkConfiguration.addCommandLineArguments(builder);
 			ConsoleConfiguration.addCommandLineArguments(builder);

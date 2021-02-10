@@ -64,7 +64,7 @@ public class SourceAndSinkConfiguration {
 
 	public static void addCommandLineArguments(CommandLineBuilder builder){
 		builder
-		.addOption(new CommandLineOption('i', null, "Read queries from standart in", false, true))
+		.addOption(new CommandLineOption('i', null, "Read queries from standard in", false, true))
 		.addOption(new CommandLineOption('s', "script", "Read queries from script file", true, true))
 		.addOption(new CommandLineOption('e', "execute", "Read queries from argument", true, true))
 		.addOption(new CommandLineOption('o', "output", "Send results to file or \"-\" for standard out", true, true));
