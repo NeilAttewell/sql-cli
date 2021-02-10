@@ -1,11 +1,18 @@
 package sqlclient.cli.z_boot.util.cli;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.util.ResourceUtils;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple3;
@@ -102,7 +109,7 @@ public class CommandLine {
 	private boolean findByLongName(CommandLineOption option, String input){
 		return option.getLongName() != null && option.getLongName().equals(input);
 	}
-	
+
 	//============================================================================================================
 	//		Help
 	//============================================================================================================
@@ -110,38 +117,101 @@ public class CommandLine {
 		return this.helpArgument != null;
 	}
 	public void printHelp(String footer) {
-		System.out.println("SQL command-line tool.  ");
 		List<Tuple3<String, Integer, String>> lines = new ArrayList<>();
-		this.allOptions
-		.stream()
-		.filter(item -> item.isIncludeInHelp())
-		.forEach(item -> {
-			String line = buildHelpLine(item, 2);
-			lines.add(Tuple.of(line, line.length(), item.getDescription()));
-		});
-		this.allOptionGroups.forEach(item -> {
-			String line = buildHelpLine(item, 2);
-			lines.add(Tuple.of(line, line.length(), item.getName()));
-			
-			item.getOptions().stream()
-			.filter(i -> i.isIncludeInHelp())
-			.forEach(i -> {
-				String l = buildHelpLine(i, 6);
-				lines.add(Tuple.of(l, l.length(), i.getDescription()));
-			});
-		});
-		
+		String helpWith = this.getValue("help");
+		if(StringUtils.isBlank(helpWith)) {
+			lines.addAll(getHelpMenuLines());
+		}else{
+			lines.addAll(getHelpLinesForOption(helpWith));
+		}
+
+		System.out.println("SQL command-line tool.  ");
 		int maxLength = lines.stream().map(item -> item._2).max(Integer::compare).get();
 		lines.forEach(item -> {
 			System.out.println(StringUtils.rightPad(item._1, maxLength, " ") + " " + item._3);
 		});
 		System.out.println(footer);
 	}
-	
+	private List<Tuple3<String, Integer, String>> getHelpMenuLines() {
+		List<Tuple3<String, Integer, String>> out = new ArrayList<>();
+		this.allOptions
+		.stream()
+		.filter(item -> item.isIncludeInHelp())
+		.forEach(item -> {
+			String line = buildHelpLine(item, 2);
+			out.add(Tuple.of(line, line.length(), item.getDescription()));
+		});
+		this.allOptionGroups.forEach(item -> {
+			String line = buildHelpLine(item, 2);
+			out.add(Tuple.of(line, line.length(), item.getName()));
+
+			item.getOptions().stream()
+			.filter(i -> i.isIncludeInHelp())
+			.forEach(i -> {
+				String l = buildHelpLine(i, 6);
+				out.add(Tuple.of(l, l.length(), i.getDescription()));
+			});
+		});
+		return out;
+	}
+	private List<Tuple3<String, Integer, String>> getHelpLinesForOption(String helpWith){
+		CommandLineOption option = this.allOptions
+				.stream()
+				.filter(item -> {
+					if(StringUtils.equals(item.getLongName(), helpWith)) {
+						return true;
+					}
+					return helpWith.length()==1 && helpWith.charAt(0) == item.getShortName();
+				})
+				.findFirst()
+				.orElse(null);
+		if(option == null) {
+			return getHelpMenuLines();
+		}
+		List<String> out = new ArrayList<>();
+		out.add("Usage:");
+		if(option.getShortName() != null) {
+			if(option.isHasValue()) {
+				out.add("	-" + option.getShortName() + "<arg>");
+				out.add("	-" + option.getShortName() + " <arg>");
+				out.add("	-" + option.getShortName() + "=<arg>");
+			}else{
+				out.add("	-" + option.getShortName());
+			}
+		}
+		if(option.getLongName() != null) {
+			if(option.isHasValue()) {
+				out.add("	--" + option.getLongName() + " <arg>");
+				out.add("	--" + option.getLongName() + "=<arg>");
+			}else{
+				out.add("	--" + option.getLongName());
+			}
+		}
+		List<String> file = getHelpFileContent(option.getLongName());
+		if(file == null) {
+			file = getHelpFileContent(option.getShortName() == null ? null : option.getShortName().toString());
+		}
+		if(file != null) {
+			out.addAll(file);
+		}
+
+		out.add("");
+		return out.stream()
+				.map(item -> Tuple.of(item,0,""))
+				.collect(Collectors.toList());
+	}
+	private List<String> getHelpFileContent(String name) {
+		try {
+			return FileUtils.readLines(ResourceUtils.getFile("classpath:help-" + name +".txt"), Charset.defaultCharset());
+		}catch (IOException e) {
+			return null;
+		}
+	}
+
 	private String buildHelpLine(CommandLineOption option, int indent) {
 		String out = StringUtils.repeat(" ", indent);
 		String seperator = "";
-		
+
 		if(option.getShortName() != null) {
 			seperator = ",";
 			out += "-" + option.getShortName();
@@ -157,9 +227,9 @@ public class CommandLine {
 	private String buildHelpLine(CommandLineOptionGroup optionGroup, int indent) {
 		String out = StringUtils.repeat(" ", indent);
 		String seperator = "";
-		
+
 		var option = optionGroup.getConditionOption();
-		
+
 		if(option.getShortName() != null) {
 			seperator = ",";
 			out += "-" + option.getShortName();
@@ -172,7 +242,7 @@ public class CommandLine {
 		}
 		return out;
 	}
-	
+
 	//============================================================================================================
 	//		Help
 	//============================================================================================================
