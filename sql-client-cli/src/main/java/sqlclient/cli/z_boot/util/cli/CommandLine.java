@@ -3,6 +3,7 @@ package sqlclient.cli.z_boot.util.cli;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +12,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.ResourceUtils;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple3;
+import sqlclient.cli.z_boot.SqlClientApplication;
 
 /**
  * @author Neil Attewell
@@ -201,10 +204,19 @@ public class CommandLine {
 				.collect(Collectors.toList());
 	}
 	private List<String> getHelpFileContent(String name) {
+		String fileName = "help-"+ name +".txt";
 		try {
 			return FileUtils.readLines(ResourceUtils.getFile("classpath:help-" + name +".txt"), Charset.defaultCharset());
 		}catch (IOException e) {
-			return null;
+			InputStream inputStream = CommandLine.class.getClassLoader().getResourceAsStream("BOOT-INF/classes/"+ fileName);
+			if(inputStream == null) {
+				return null;
+			}
+			try {
+				return IOUtils.readLines(inputStream, Charset.defaultCharset());
+			} catch (IOException e1) {
+				return null;
+			}
 		}
 	}
 
