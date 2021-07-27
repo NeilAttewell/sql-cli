@@ -17,15 +17,15 @@ import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import sqlclient.cli.ApplicationState;
-import sqlclient.cli.contracts.IInputExecutor;
-import sqlclient.cli.contracts.IVariableStore;
-import sqlclient.cli.domain.DisplayTypeEnum;
-import sqlclient.cli.domain.Query;
-import sqlclient.cli.domain.QueryPart;
 import sqlclient.cli.domain.QueryResultSet;
-import sqlclient.cli.printer.IResultSetPrinter;
-import sqlclient.cli.printer.IResultUpdatePrinter;
+import sqlclient.core.ApplicationState;
+import sqlclient.core.contracts.IInputExecutor;
+import sqlclient.core.contracts.IResultSetPrinter;
+import sqlclient.core.contracts.IResultUpdatePrinter;
+import sqlclient.core.contracts.IVariableStore;
+import sqlclient.core.domain.DisplayTypeEnum;
+import sqlclient.core.domain.Query;
+import sqlclient.core.domain.QueryPart;
 
 /**
  * @author Neil Attewell

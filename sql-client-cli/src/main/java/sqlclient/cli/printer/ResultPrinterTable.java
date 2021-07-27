@@ -14,9 +14,11 @@ import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import sqlclient.cli.contracts.IOutputSink;
-import sqlclient.cli.contracts.IQueryResult;
-import sqlclient.cli.domain.DisplayTypeEnum;
+import sqlclient.core.contracts.IOutputSink;
+import sqlclient.core.contracts.IPrintFormatter;
+import sqlclient.core.contracts.IQueryResult;
+import sqlclient.core.contracts.IResultSetPrinter;
+import sqlclient.core.domain.DisplayTypeEnum;
 
 /**
  * @author Neil Attewell
@@ -24,6 +26,7 @@ import sqlclient.cli.domain.DisplayTypeEnum;
 @Component
 public class ResultPrinterTable implements IResultSetPrinter{
 	@Autowired private IOutputSink outputSink;
+	@Autowired private List<? extends IPrintFormatter> formatters;
 	@Override
 	public boolean canPrintForResultSet(DisplayTypeEnum displayType) {
 		return displayType == DisplayTypeEnum.Table;
@@ -49,7 +52,7 @@ public class ResultPrinterTable implements IResultSetPrinter{
 		while (resultSet.next()) {
 			records.add(columnNames.stream()
 					.map(item -> {
-						String value = expand(getColumnObject(resultSet, item._1, "NULL"));
+						String value = expand(IPrintFormatter.formatter(this.formatters, resultSet, item._1, "NULL"));
 						columnWidths.put(item._1, Math.max(columnWidths.get(item._1), value.length()));
 						return Tuple.of(item._1, value);
 					})

@@ -4,14 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import sqlclient.cli.Application;
-import sqlclient.cli.ApplicationState;
-import sqlclient.cli.QueryAliasRegistry;
-import sqlclient.cli.SpecialCharacterRegistry;
-import sqlclient.cli.VariableStoreLastQueryResult;
-import sqlclient.cli.VariableStoreSystem;
-import sqlclient.cli.VariableStoreUser;
-import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
-import sqlclient.cli.z_boot.util.cli.CommandLineOption;
+import sqlclient.core.ApplicationState;
+import sqlclient.core.QueryAliasRegistry;
+import sqlclient.core.SpecialCharacterRegistry;
+import sqlclient.core.VariableStoreLastQueryResult;
+import sqlclient.core.VariableStoreSystem;
+import sqlclient.core.VariableStoreUser;
+import sqlclient.core.util.cli.CommandLineBuilder;
+import sqlclient.core.util.cli.CommandLineOption;
 
 /**
  * @author Neil Attewell

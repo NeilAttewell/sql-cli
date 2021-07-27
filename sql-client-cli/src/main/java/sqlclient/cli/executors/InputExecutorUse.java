@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import sqlclient.cli.ApplicationState;
-import sqlclient.cli.contracts.ICommand;
-import sqlclient.cli.contracts.IInputExecutor;
-import sqlclient.cli.domain.Query;
+import sqlclient.core.ApplicationState;
+import sqlclient.core.contracts.ICommand;
+import sqlclient.core.contracts.IInputExecutor;
+import sqlclient.core.domain.Query;
 
 /**
  * @author Neil Attewell

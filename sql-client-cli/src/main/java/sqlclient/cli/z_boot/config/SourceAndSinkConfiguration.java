@@ -14,9 +14,9 @@ import sqlclient.cli.sources.InputSourceConsole;
 import sqlclient.cli.sources.InputSourceExecute;
 import sqlclient.cli.sources.InputSourceScript;
 import sqlclient.cli.sources.InputSourceStandardIn;
-import sqlclient.cli.z_boot.util.cli.CommandLine;
-import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
-import sqlclient.cli.z_boot.util.cli.CommandLineOption;
+import sqlclient.core.util.cli.CommandLine;
+import sqlclient.core.util.cli.CommandLineBuilder;
+import sqlclient.core.util.cli.CommandLineOption;
 
 /**
  * @author Neil Attewell

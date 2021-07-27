@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Profile;
 
 import sqlclient.cli.sources.console.MultilineParser;
 import sqlclient.cli.sources.console.QueryOnlyHistory;
-import sqlclient.cli.z_boot.util.cli.CommandLine;
-import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
-import sqlclient.cli.z_boot.util.cli.CommandLineOption;
+import sqlclient.core.util.cli.CommandLine;
+import sqlclient.core.util.cli.CommandLineBuilder;
+import sqlclient.core.util.cli.CommandLineOption;
 
 
 /**

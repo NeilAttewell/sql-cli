@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.vavr.Tuple;
-import sqlclient.cli.contracts.IQueryResult;
+import sqlclient.core.contracts.IQueryResult;
 
 public final class TupleListQueryResult<TupleImp extends Tuple> implements IQueryResult{
 	private static final Map<String, Method> REFLECTION = buildMethodReflection();

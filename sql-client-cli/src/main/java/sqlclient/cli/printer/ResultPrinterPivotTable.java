@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple3;
-import sqlclient.cli.contracts.IOutputSink;
-import sqlclient.cli.contracts.IQueryResult;
-import sqlclient.cli.domain.DisplayTypeEnum;
+import sqlclient.core.contracts.IOutputSink;
+import sqlclient.core.contracts.IPrintFormatter;
+import sqlclient.core.contracts.IQueryResult;
+import sqlclient.core.contracts.IResultSetPrinter;
+import sqlclient.core.domain.DisplayTypeEnum;
 
 /**
  * @author Neil Attewell
@@ -21,6 +23,7 @@ import sqlclient.cli.domain.DisplayTypeEnum;
 @Component
 public class ResultPrinterPivotTable implements IResultSetPrinter{
 	@Autowired private IOutputSink outputSink;
+	@Autowired private List<? extends IPrintFormatter> formatters;
 	@Override
 	public boolean canPrintForResultSet(DisplayTypeEnum displayType) {
 		return displayType == DisplayTypeEnum.PivotTable;
@@ -40,7 +43,7 @@ public class ResultPrinterPivotTable implements IResultSetPrinter{
 		while (resultSet.next()) {
 			this.outputSink.writeLine(buildLine(++recordNumber));
 			columns.forEach(column -> {
-				this.outputSink.writeLine(buildRecordLine(column, getColumnObject(resultSet, column._1, "NULL")));
+				this.outputSink.writeLine(buildRecordLine(column, IPrintFormatter.formatter(this.formatters, resultSet, column._1, "NULL")));
 			});
 		}
 		this.outputSink.printInfo(recordNumber + " row in set ("+ queryTime +" ms)");

@@ -19,16 +19,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import sqlclient.cli.Application;
-import sqlclient.cli.contracts.IOutputSink;
-import sqlclient.cli.z_boot.config.ConnectionMysqlConfiguration;
-import sqlclient.cli.z_boot.config.ConnectionOracleConfiguration;
 import sqlclient.cli.z_boot.config.ConsoleConfiguration;
 import sqlclient.cli.z_boot.config.ServiceConfiguration;
 import sqlclient.cli.z_boot.config.SourceAndSinkConfiguration;
-import sqlclient.cli.z_boot.util.cli.CommandLine;
-import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
-import sqlclient.cli.z_boot.util.cli.CommandLineOption;
-import sqlclient.cli.z_boot.util.cli.CommandLineOptionGroup;
+import sqlclient.core.contracts.IOutputSink;
+import sqlclient.core.util.cli.CommandLine;
+import sqlclient.core.util.cli.CommandLineBuilder;
+import sqlclient.core.util.cli.CommandLineOption;
+import sqlclient.core.util.cli.CommandLineOptionGroup;
+import sqlclient.provider.mysql.z_boot.config.MysqlConnectionConfiguration;
+import sqlclient.provider.oracle.z_boot.config.OracleConnectionConfiguration;
 
 /**
  * @author Neil Attewell
@@ -70,8 +70,8 @@ public class SqlClientApplication implements CommandLineRunner{
 			ConsoleConfiguration.addCommandLineArguments(builder);
 			ServiceConfiguration.addCommandLineArguments(builder);
 			
-			ConnectionOracleConfiguration.addCommandLineArguments(builder);
-			ConnectionMysqlConfiguration.addCommandLineArguments(builder);
+			OracleConnectionConfiguration.addCommandLineArguments(builder);
+			MysqlConnectionConfiguration.addCommandLineArguments(builder);
 
 
 			CommandLine commandLine = builder.build();

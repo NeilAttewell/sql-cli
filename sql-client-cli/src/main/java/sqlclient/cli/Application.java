@@ -9,11 +9,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import sqlclient.cli.contracts.IInputExecutor;
 import sqlclient.cli.contracts.IInputSource;
-import sqlclient.cli.contracts.IOutputSink;
-import sqlclient.cli.domain.Query;
-import sqlclient.cli.exceptions.ExitException;
+import sqlclient.core.QueryAliasRegistry;
+import sqlclient.core.SpecialCharacterRegistry;
+import sqlclient.core.contracts.IInputExecutor;
+import sqlclient.core.contracts.IOutputSink;
+import sqlclient.core.domain.Query;
+import sqlclient.core.exceptions.ExitException;
 
 /**
  * @author Neil Attewell

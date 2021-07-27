@@ -1,0 +1,5 @@
+Where <arg> is the location of the variables file.
+
+The variables file must be a valid properties file, with the format:
+variable1=value
+variable2=value

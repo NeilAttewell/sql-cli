@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+sqlclient.provider.mysql.z_boot.MysqlConfiguration
