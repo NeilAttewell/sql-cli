@@ -9,11 +9,11 @@ import org.jline.reader.impl.DefaultParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
-import sqlclient.cli.QueryAliasRegistry;
-import sqlclient.cli.SpecialCharacterRegistry;
-import sqlclient.cli.contracts.ICommand;
-import sqlclient.cli.domain.Query;
-import sqlclient.cli.z_boot.util.SqlParserUtils;
+import sqlclient.core.QueryAliasRegistry;
+import sqlclient.core.SpecialCharacterRegistry;
+import sqlclient.core.contracts.ICommand;
+import sqlclient.core.domain.Query;
+import sqlclient.core.util.SqlParserUtils;
 
 /**
  * @author Neil Attewell

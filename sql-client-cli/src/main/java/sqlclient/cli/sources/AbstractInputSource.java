@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 import io.vavr.Tuple2;
-import sqlclient.cli.QueryAliasRegistry;
-import sqlclient.cli.SpecialCharacterRegistry;
-import sqlclient.cli.contracts.ICommand;
 import sqlclient.cli.contracts.IInputSource;
-import sqlclient.cli.domain.Query;
-import sqlclient.cli.domain.QueryPart;
-import sqlclient.cli.z_boot.util.SqlParserUtils;
+import sqlclient.core.QueryAliasRegistry;
+import sqlclient.core.SpecialCharacterRegistry;
+import sqlclient.core.contracts.ICommand;
+import sqlclient.core.domain.Query;
+import sqlclient.core.domain.QueryPart;
+import sqlclient.core.util.SqlParserUtils;
 
 /**
  * @author Neil Attewell

@@ -1,6 +1,6 @@
 package sqlclient.cli.sinks;
 
-import sqlclient.cli.contracts.IOutputSink;
+import sqlclient.core.contracts.IOutputSink;
 
 /**
  * @author Neil Attewell

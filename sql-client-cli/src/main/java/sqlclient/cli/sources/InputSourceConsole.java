@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import sqlclient.cli.ApplicationState;
+import sqlclient.core.ApplicationState;
 
 /**
  * @author Neil Attewell

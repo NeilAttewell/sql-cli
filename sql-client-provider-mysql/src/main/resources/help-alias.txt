@@ -1,0 +1,16 @@
+Where <arg> is the location of the alias file.
+
+Alias file format:
+An alias must start with and have a name, the name must start with a letter (a-z) followed by letters, numbers, underscores and spaces.
+The alias can reference other aliases and variables, it can also be made up of multiple queries.
+
+Format of an alias:
+[name]
+query
+
+Example:
+	[test alias]
+	select 'my test alias' from dual;
+
+	[whats the time]
+	SELECT NOW() from DUAL;

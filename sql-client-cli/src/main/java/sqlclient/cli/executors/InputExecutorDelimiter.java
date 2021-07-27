@@ -8,11 +8,11 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import sqlclient.cli.SpecialCharacterRegistry;
-import sqlclient.cli.contracts.ICommand;
-import sqlclient.cli.contracts.IInputExecutor;
-import sqlclient.cli.domain.Query;
-import sqlclient.cli.exceptions.ExitException;
+import sqlclient.core.SpecialCharacterRegistry;
+import sqlclient.core.contracts.ICommand;
+import sqlclient.core.contracts.IInputExecutor;
+import sqlclient.core.domain.Query;
+import sqlclient.core.exceptions.ExitException;
 
 /**
  * @author Neil Attewell

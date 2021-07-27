@@ -3,7 +3,7 @@ package sqlclient.cli.domain;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import sqlclient.cli.contracts.IQueryResult;
+import sqlclient.core.contracts.IQueryResult;
 
 /**
  * @author Neil Attewell

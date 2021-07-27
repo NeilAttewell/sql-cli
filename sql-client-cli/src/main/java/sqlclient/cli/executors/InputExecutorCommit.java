@@ -6,9 +6,10 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import sqlclient.cli.ApplicationState;
-import sqlclient.cli.contracts.IOutputSink;
-import sqlclient.cli.domain.Query;
+import sqlclient.core.ApplicationState;
+import sqlclient.core.contracts.IOutputSink;
+import sqlclient.core.domain.Query;
+import sqlclient.core.executors.AbstractCommandExecutor;
 
 /**
  * @author Neil Attewell

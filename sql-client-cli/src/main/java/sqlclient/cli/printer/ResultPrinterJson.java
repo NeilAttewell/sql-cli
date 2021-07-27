@@ -12,9 +12,11 @@ import org.springframework.stereotype.Component;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import net.sf.json.JSONObject;
-import sqlclient.cli.contracts.IOutputSink;
-import sqlclient.cli.contracts.IQueryResult;
-import sqlclient.cli.domain.DisplayTypeEnum;
+import sqlclient.core.contracts.IOutputSink;
+import sqlclient.core.contracts.IPrintFormatter;
+import sqlclient.core.contracts.IQueryResult;
+import sqlclient.core.contracts.IResultSetPrinter;
+import sqlclient.core.domain.DisplayTypeEnum;
 
 /**
  * @author Neil Attewell
@@ -23,6 +25,7 @@ import sqlclient.cli.domain.DisplayTypeEnum;
 public class ResultPrinterJson implements IResultSetPrinter{
 	private static final String NULL_PLACEHOLDER="{{~NULL~PLACEHOLDER~}}";
 	@Autowired private IOutputSink outputSink;
+	@Autowired private List<? extends IPrintFormatter> formatters;
 
 	@Override
 	public boolean canPrintForResultSet(DisplayTypeEnum displayType) {
@@ -61,7 +64,7 @@ public class ResultPrinterJson implements IResultSetPrinter{
 	}
 	private JSONObject buildRecord(List<Tuple2<Integer, String>> columns, IQueryResult resultSet) {
 		JSONObject out = new JSONObject();
-		columns.forEach(column -> out.accumulate(column._2, getColumnObject(resultSet, column._1,NULL_PLACEHOLDER)));
+		columns.forEach(column -> out.accumulate(column._2, IPrintFormatter.formatter(this.formatters, resultSet, column._1, NULL_PLACEHOLDER)));
 		return out;
 	}
 }

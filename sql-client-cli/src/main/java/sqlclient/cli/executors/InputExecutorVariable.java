@@ -12,9 +12,10 @@ import org.springframework.stereotype.Component;
 import io.vavr.Tuple;
 import io.vavr.Tuple0;
 import io.vavr.Tuple2;
-import sqlclient.cli.ApplicationState;
-import sqlclient.cli.domain.Query;
 import sqlclient.cli.domain.TupleListQueryResult;
+import sqlclient.core.ApplicationState;
+import sqlclient.core.domain.Query;
+import sqlclient.core.executors.AbstractPatternCommandExecutor;
 
 /**
  * @author Neil Attewell

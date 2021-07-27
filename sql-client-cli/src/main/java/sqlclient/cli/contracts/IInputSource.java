@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.DisposableBean;
 
-import sqlclient.cli.domain.Query;
+import sqlclient.core.domain.Query;
 
 /**
  * @author Neil Attewell

@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import sqlclient.cli.z_boot.util.cli.CommandLine;
+import sqlclient.core.util.cli.CommandLine;
 
 /**
  * @author Neil Attewell

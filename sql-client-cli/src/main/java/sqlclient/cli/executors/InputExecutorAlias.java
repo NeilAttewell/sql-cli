@@ -13,10 +13,11 @@ import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple1;
-import sqlclient.cli.QueryAliasRegistry;
-import sqlclient.cli.SpecialCharacterRegistry;
-import sqlclient.cli.domain.Query;
 import sqlclient.cli.domain.TupleListQueryResult;
+import sqlclient.core.QueryAliasRegistry;
+import sqlclient.core.SpecialCharacterRegistry;
+import sqlclient.core.domain.Query;
+import sqlclient.core.executors.AbstractPatternCommandExecutor;
 
 @Component
 public class InputExecutorAlias extends AbstractPatternCommandExecutor{

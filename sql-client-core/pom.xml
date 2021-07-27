@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+	<groupId>sql-client</groupId>
+	<artifactId>parent</artifactId>
+	<version>1.2.0</version>
+	</parent>
+	<artifactId>sql-client-core</artifactId>
+	<packaging>jar</packaging>
+	<name>SQL Client Core</name>
+
+	<dependencies>
+		<dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId></dependency>
+		<dependency><groupId>commons-lang</groupId><artifactId>commons-lang</artifactId></dependency>
+		<dependency><groupId>io.vavr</groupId><artifactId>vavr</artifactId></dependency>
+		<dependency><groupId>net.sf.json-lib</groupId><artifactId>json-lib</artifactId><classifier>jdk15</classifier></dependency>
+		<dependency><groupId>net.sf.trove4j</groupId><artifactId>trove4j</artifactId></dependency>
+		<dependency><groupId>org.apache.commons</groupId><artifactId>commons-collections4</artifactId></dependency>
+		<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter</artifactId></dependency>
+		<dependency><groupId>org.springframework</groupId><artifactId>spring-jdbc</artifactId></dependency>
+	</dependencies>
+</project>

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import sqlclient.cli.SpecialCharacterRegistry;
-import sqlclient.cli.domain.Query;
-import sqlclient.cli.z_boot.util.SqlParserUtils;
+import sqlclient.core.SpecialCharacterRegistry;
+import sqlclient.core.domain.Query;
+import sqlclient.core.util.SqlParserUtils;
 
 /**
  * @author Neil Attewell

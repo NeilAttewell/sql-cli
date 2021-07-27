@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import sqlclient.cli.z_boot.util.cli.CommandLine;
+import sqlclient.core.util.cli.CommandLine;
 
 /**
  * @author Neil Attewell

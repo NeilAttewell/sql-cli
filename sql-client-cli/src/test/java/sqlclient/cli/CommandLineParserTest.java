@@ -6,8 +6,8 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
-import sqlclient.cli.z_boot.util.cli.CommandLine;
-import sqlclient.cli.z_boot.util.cli.CommandLineBuilder;
+import sqlclient.core.util.cli.CommandLine;
+import sqlclient.core.util.cli.CommandLineBuilder;
 
 /**
  * POSIX like options (ie. tar -zxvf foo.tar.gz)
