@@ -21,15 +21,10 @@ Here's why:
 11. Format query results as JSON Array
 12. List aliases
 13. Execute above alias.  eg:  When connecting to oracle, "show tables" lists all tables in the database.
+14. Add/Edit aliases
+15. Support variables  
 
 ### Future Features
-
-1. Add/Edit/Remove aliases
-2. Support variables  
-
-And more...
-
-
 
 ### Built With
 
