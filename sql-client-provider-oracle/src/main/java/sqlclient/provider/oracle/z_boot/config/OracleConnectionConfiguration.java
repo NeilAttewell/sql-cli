@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import sqlclient.core.ApplicationState;
 import sqlclient.core.QueryAliasRegistry;
 import sqlclient.core.SpecialCharacterRegistry;
 import sqlclient.core.contracts.IOutputSink;
@@ -30,6 +31,7 @@ public class OracleConnectionConfiguration {
 	@Autowired private IOutputSink sink;
 	@Autowired private QueryAliasRegistry aliasRegistry;
 	@Autowired private SpecialCharacterRegistry characterRegistry;
+	@Autowired private ApplicationState state;
 
 	@Bean
 	public String dbType() {
@@ -58,14 +60,21 @@ public class OracleConnectionConfiguration {
 			throw new IllegalArgumentException("Missing password");
 		}
 
+		var autoCommit = this.commandLine.getValue("auto-commit");
+		if(StringUtils.isBlank(autoCommit)) {
+			autoCommit = "false";
+		}
+		this.state.setAutoCommit(Boolean.parseBoolean(autoCommit));
+
 		//		Class.forName("oracle.jdbc.driver.OracleDriver");
 		Properties properties = new Properties();
 		properties.put("user", username);
 		properties.put("password", password);
 		long startTime=System.currentTimeMillis();
 		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@" + hostname + ":" + port + "/" + sid,properties);
-		connection.setAutoCommit(false);
-		this.sink.printInfo("Connection to Oracle established.  Took: " + (System.currentTimeMillis()-startTime));
+		connection.setAutoCommit(this.state.isAutoCommit());
+
+		this.sink.printInfo("Connection to Oracle established.  Took: " + (System.currentTimeMillis()-startTime) + ".  Auto Commit is " + (this.state.isAutoCommit() ? "Enabled" : "Disabled"));
 		this.aliasRegistry.addFixedAlias(this.characterRegistry, "show tables", "select table_name from user_tables order by 1");
 		return connection;
 	}
@@ -79,6 +88,7 @@ public class OracleConnectionConfiguration {
 			.withOption(new CommandLineOption('P', "port", "Database listener port", true, true))
 			.withOption(new CommandLineOption('u', "username", "Username", true, true))
 			.withOption(new CommandLineOption('p', "password", "Password", true, true))
+			.withOption(new CommandLineOption('a', "auto-commit", "Auto Commit.  Default: false", true, true))
 			.withConditionOption(new CommandLineOption('t', "type", "Database type",true, true))
 			.withConditionValue("oracle")
 			.build();

@@ -32,7 +32,6 @@ public class InputExecutorRollback extends AbstractCommandExecutor{
 	public void execute(Query query) throws SQLException {
 		try {
 			this.connection.rollback();
-			this.state.setUpdateCount(0);
 		} catch (SQLException e) {
 			this.outputSink.printError("Failed to rollback transaction.  Reason:[" + e.getMessage() + "]");
 		}

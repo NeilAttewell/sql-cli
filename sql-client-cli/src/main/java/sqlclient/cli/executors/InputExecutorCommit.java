@@ -32,7 +32,6 @@ public class InputExecutorCommit extends AbstractCommandExecutor{
 	public void execute(Query query) throws SQLException {
 		try {
 			this.connection.commit();
-			this.state.setUpdateCount(0);
 		} catch (SQLException e) {
 			this.outputSink.printError("Failed to commit transaction.  Reason:[" + e.getMessage() + "]");
 		}

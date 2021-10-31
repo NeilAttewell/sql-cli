@@ -123,7 +123,7 @@ public class InputExecutorQuery implements IInputExecutor{
 					return new QueryPart(out, false);
 				})
 				.collect(Collectors.toList());
-		return Tuple.of(new Query(parts, query.getDelimiter()), parameterNames);
+		return Tuple.of(new Query(parts, query.getDelimiter(), query.isPartOfMultiQuery()), parameterNames);
 	}
 	private String replaceHandlebars(String sql) {
 		var list = List.of(this.applicationState.getVariableStoreUser(),this.applicationState.getVariableStoreLastQueryResult());

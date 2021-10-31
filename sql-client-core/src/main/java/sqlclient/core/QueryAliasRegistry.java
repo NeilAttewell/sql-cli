@@ -95,7 +95,7 @@ public class QueryAliasRegistry {
 					if(StringUtils.isNotBlank(item.getDelimiter())) {
 						return item;
 					}
-					return new Query(item.getParts(), delimiter);
+					return new Query(item.getParts(), delimiter, false);
 				})
 				.collect(Collectors.toList());
 	}

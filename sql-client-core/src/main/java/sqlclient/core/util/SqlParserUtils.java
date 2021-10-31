@@ -2,6 +2,7 @@ package sqlclient.core.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -45,7 +46,7 @@ public class SqlParserUtils {
 				continue;
 			}
 			parts.add(new QueryPart(StringUtils.substringBeforeLast(currentPart, split),false));
-			out.add(new Query(parts,split));
+			out.add(new Query(parts,split, false));
 			input = StringUtils.substring(input, i+1);
 			i=-1;
 			currentPart="";
@@ -56,9 +57,15 @@ public class SqlParserUtils {
 			parts.add(new QueryPart(StringUtils.substringBeforeLast(currentPart, split),false));
 		}
 		if(!parts.isEmpty()) {
-			out.add(new Query(parts,null));
+			out.add(new Query(parts,null, false));
 		}
-		return out;
+		
+		if(out.isEmpty() || out.size() == 1) {
+			return out;
+		}
+		return out.stream()
+				.map(item -> new Query(item.getParts(), item.getDelimiter(), true))
+				.collect(Collectors.toList());
 	}
 	private static String getIfWrapperAtPosition(String string, int position, String currentWrapper, SpecialCharacterRegistry registry) {
 		for(String wrapString : registry.getWrapperStrings()) {

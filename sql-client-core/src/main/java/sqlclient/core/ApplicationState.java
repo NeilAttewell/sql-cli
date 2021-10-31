@@ -12,7 +12,6 @@ public class ApplicationState {
 	@Autowired private VariableStoreSystem variableStoreSystem;
 	@Autowired private VariableStoreLastQueryResult variableStoreLastQueryResult;
 	private boolean autoCommit;
-	private int updateCount;
 	private String inputPromptPrefix;
 	
 	public boolean isAutoCommit() {
@@ -20,12 +19,6 @@ public class ApplicationState {
 	}
 	public void setAutoCommit(boolean autoCommit) {
 		this.autoCommit = autoCommit;
-	}
-	public int getUpdateCount() {
-		return updateCount;
-	}
-	public void setUpdateCount(int updateCount) {
-		this.updateCount = updateCount;
 	}
 	public String getInputPromptPrefix() {
 		return inputPromptPrefix;

@@ -54,14 +54,20 @@ public class MysqlConnectionConfiguration {
 			throw new IllegalArgumentException("Missing password");
 		}
 
+		var autoCommit = this.commandLine.getValue("auto-commit");
+		if(StringUtils.isBlank(autoCommit)) {
+			autoCommit = "true";
+		}
+		this.state.setAutoCommit(Boolean.parseBoolean(autoCommit));
+
 		long startTime=System.currentTimeMillis();
 		Properties properties = new Properties();
 		properties.put("user", username);
 		properties.put("password", password);
 		Connection connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + (StringUtils.isBlank(database) ? "" : ("/" + database)),properties);
-		connection.setAutoCommit(false);
+		connection.setAutoCommit(this.state.isAutoCommit());
 		
-		this.sink.printInfo("Connection to MySQL established.  Took: " + (System.currentTimeMillis()-startTime));
+		this.sink.printInfo("Connection to MySQL established.  Took: " + (System.currentTimeMillis()-startTime) + ".  Auto Commit is " + (this.state.isAutoCommit() ? "Enabled" : "Disabled"));
 		
 		if(this.commandLine.getValue("db") != null) {
 			this.state.setInputPromptPrefix(this.commandLine.getValue("db"));
@@ -79,6 +85,7 @@ public class MysqlConnectionConfiguration {
 			.withOption(new CommandLineOption('P', "port", "Database listener port", true, true))
 			.withOption(new CommandLineOption('u', "username", "Username", true, true))
 			.withOption(new CommandLineOption('p', "password", "Password", true, true))
+			.withOption(new CommandLineOption('a', "auto-commit", "Auto Commit.  Default: true", true, true))
 			.withConditionOption(new CommandLineOption('t', "type", "Database type",true, true))
 			.withConditionValue("mysql")
 			.build();

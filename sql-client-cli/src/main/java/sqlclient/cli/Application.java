@@ -35,6 +35,10 @@ public class Application {
 				if(StringUtils.equals(this.characterRegistry.getCancelDelimiter(), query.getDelimiter())) {
 					continue;
 				}
+				if(query.isPartOfMultiQuery()) {
+					this.outputSink.writeLine("");
+					this.outputSink.writeLine(query.getQuery().replaceAll("(?:\\n|\\r)", " "));
+				}
 				for(Query item : expand(query)) {
 					findExecutor(item).execute(item);
 				}
