@@ -30,7 +30,7 @@ public class InputExecutorDescribe extends AbstractPatternCommandExecutor{
 
 	public InputExecutorDescribe() {
 		super();
-		addPattern(Pattern.compile("^desc\\s+(?<tableName>[a-zA-Z_]\\w*)$", Pattern.CASE_INSENSITIVE), this::doDescribe);
+		addPattern(Pattern.compile("^desc\\s+((?<schema>[a-zA-Z_]\\w*)\\.)?(?<tableName>[a-zA-Z_]\\w*)$", Pattern.CASE_INSENSITIVE), this::doDescribe);
 	}
 	@Override
 	public String getCommand() {
@@ -39,7 +39,8 @@ public class InputExecutorDescribe extends AbstractPatternCommandExecutor{
 
 	private IQueryResult doDescribe(Query query, Matcher matcher) throws SQLException {
 		DatabaseMetaData metaData = this.connection.getMetaData();
-		ResultSet columnResultSet = metaData.getColumns(this.connection.getCatalog(), null, matcher.group("tableName").toUpperCase(), null);
+		String schema = StringUtils.defaultIfBlank(matcher.group("schema"), this.connection.getSchema());
+		ResultSet columnResultSet = metaData.getColumns(this.connection.getCatalog(), schema, matcher.group("tableName").toUpperCase(), null);
 
 		List<QueryResultSetMetadata.Column> columns = new ArrayList<>();
 		while(columnResultSet.next()) {
@@ -64,6 +65,7 @@ public class InputExecutorDescribe extends AbstractPatternCommandExecutor{
 		while(defaultValueResultSet.next()) {
 			String columnName = defaultValueResultSet.getString("COLUMN_NAME");
 			String defaultValue = defaultValueResultSet.getString("DATA_DEFAULT");
+			
 			columns.stream()
 			.filter(item -> StringUtils.equals(item.getField(), columnName))
 			.forEach(item -> item.setDefaultValue(defaultValue));
@@ -71,5 +73,4 @@ public class InputExecutorDescribe extends AbstractPatternCommandExecutor{
 		
 		return new QueryResultSetMetadata(columns);
 	}
-
 }

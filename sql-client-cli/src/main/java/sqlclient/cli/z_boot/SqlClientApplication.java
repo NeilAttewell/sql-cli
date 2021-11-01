@@ -92,7 +92,9 @@ public class SqlClientApplication implements CommandLineRunner{
 					}
 				}
 				BuildProperties buildProperties = new BuildProperties(targetProperties);
-				commandLine.printHelp("Version: " + buildProperties.getVersion() + "\nWritten by Neil Attewell");
+				commandLine.printHelp("Version: " + buildProperties.getVersion() + 
+						"\nhttps://github.com/NeilAttewell/sql-client" +
+						"\nWritten by Neil Attewell");
 				return;
 			}
 			
