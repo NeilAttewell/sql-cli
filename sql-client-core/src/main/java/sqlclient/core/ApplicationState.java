@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationState {
 	@Autowired private VariableStoreUser variableStoreUser;
-	@Autowired private VariableStoreSystem variableStoreSystem;
 	@Autowired private VariableStoreLastQueryResult variableStoreLastQueryResult;
 	private boolean autoCommit;
 	private String inputPromptPrefix;
@@ -25,9 +24,6 @@ public class ApplicationState {
 	}
 	public void setInputPromptPrefix(String inputPromptPrefix) {
 		this.inputPromptPrefix = inputPromptPrefix;
-	}
-	public VariableStoreSystem getVariableStoreSystem() {
-		return variableStoreSystem;
 	}
 	public VariableStoreUser getVariableStoreUser() {
 		return variableStoreUser;

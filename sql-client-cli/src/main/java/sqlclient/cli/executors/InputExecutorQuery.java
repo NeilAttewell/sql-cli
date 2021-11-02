@@ -32,7 +32,7 @@ import sqlclient.core.domain.QueryPart;
  */
 @Component
 public class InputExecutorQuery implements IInputExecutor{
-	private static final Pattern PATTERN = Pattern.compile("(:[a-zA-Z_]\\w*)",Pattern.CASE_INSENSITIVE);
+	private static final Pattern PATTERN = Pattern.compile("([:@](?<name>[a-zA-Z_]\\w*))",Pattern.CASE_INSENSITIVE);
 	@Autowired private Connection connection;
 	@Autowired private List<? extends IResultSetPrinter> resultSetPrinters;
 	@Autowired private List<? extends IResultUpdatePrinter> resultUpdatePrinters;
@@ -99,6 +99,10 @@ public class InputExecutorQuery implements IInputExecutor{
 			}
 			resultSet.doSkipNext();
 			printer.print(resultSet, System.currentTimeMillis()-startTime);
+			while(statement.getMoreResults()) {
+				resultSet = new QueryResultSet(statement.getResultSet());
+				printer.print(resultSet, System.currentTimeMillis()-startTime);
+			}
 		}else {
 			getPrinter(this.resultUpdatePrinters, item -> item.canPrintForUpdate(displayType), IResultUpdatePrinter::isDefaultForUpdate)
 			.print(statement.getUpdateCount(), System.currentTimeMillis()-startTime);
@@ -116,9 +120,8 @@ public class InputExecutorQuery implements IInputExecutor{
 
 					Matcher matcher = PATTERN.matcher(item.getValue());
 					while ( matcher.find() ) {
-						String name = matcher.group(0);
-						out = StringUtils.replaceOnce(out, name, "?");
-						parameterNames.add(StringUtils.substringAfter(name, ":"));
+						out = StringUtils.replaceOnce(out, matcher.group(0), "?");
+						parameterNames.add(matcher.group("name"));
 					}
 					return new QueryPart(out, false);
 				})
@@ -127,7 +130,7 @@ public class InputExecutorQuery implements IInputExecutor{
 	}
 	private String replaceHandlebars(String sql) {
 		var list = List.of(this.applicationState.getVariableStoreUser(),this.applicationState.getVariableStoreLastQueryResult());
-		
+
 		for(IVariableStore store : list) {
 			for(String name : store.getNames()) {
 				String search = "{{" + name + "}}";
