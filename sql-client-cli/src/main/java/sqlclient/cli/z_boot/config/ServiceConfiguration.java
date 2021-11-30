@@ -8,7 +8,6 @@ import sqlclient.core.ApplicationState;
 import sqlclient.core.QueryAliasRegistry;
 import sqlclient.core.SpecialCharacterRegistry;
 import sqlclient.core.VariableStoreLastQueryResult;
-import sqlclient.core.VariableStoreSystem;
 import sqlclient.core.VariableStoreUser;
 import sqlclient.core.util.cli.CommandLineBuilder;
 import sqlclient.core.util.cli.CommandLineOption;
@@ -37,10 +36,6 @@ public class ServiceConfiguration {
 	@Bean
 	public VariableStoreLastQueryResult variableStoreLastQueryResult() {
 		return new VariableStoreLastQueryResult();
-	}
-	@Bean
-	public VariableStoreSystem variableStoreSystem() {
-		return new VariableStoreSystem();
 	}
 	@Bean
 	public VariableStoreUser variableStoreUser() {

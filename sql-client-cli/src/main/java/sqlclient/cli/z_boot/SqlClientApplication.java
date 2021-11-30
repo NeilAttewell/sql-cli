@@ -37,16 +37,12 @@ import sqlclient.provider.oracle.z_boot.config.OracleConnectionConfiguration;
 @EnableConfigurationProperties
 @ComponentScan(basePackageClasses= {SourceAndSinkConfiguration.class})
 public class SqlClientApplication implements CommandLineRunner{
-	protected static CommandLine commandLine;
+	private static CommandLine commandLine;
 	private static LocalTime startTime;
 
 	@Autowired private Application application;
 	@Autowired private IOutputSink outputSink;
 	
-	@Bean
-	public CommandLine commandLine() {
-		return SqlClientApplication.commandLine;
-	}
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -55,7 +51,9 @@ public class SqlClientApplication implements CommandLineRunner{
 		this.outputSink.printInfo("");
 		this.application.run();
 	}
-
+	public static CommandLine getCommandLine() {
+		return SqlClientApplication.commandLine;
+	}
 	public static void main(String[] args){
 		try {
 			SqlClientApplication.startTime = LocalTime.now();
@@ -94,7 +92,9 @@ public class SqlClientApplication implements CommandLineRunner{
 					}
 				}
 				BuildProperties buildProperties = new BuildProperties(targetProperties);
-				commandLine.printHelp("Version: " + buildProperties.getVersion() + "\nWritten by Neil Attewell");
+				commandLine.printHelp("Version: " + buildProperties.getVersion() + 
+						"\nhttps://github.com/NeilAttewell/sql-client" +
+						"\nWritten by Neil Attewell");
 				return;
 			}
 			

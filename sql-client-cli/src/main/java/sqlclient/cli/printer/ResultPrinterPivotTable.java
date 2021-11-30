@@ -39,11 +39,12 @@ public class ResultPrinterPivotTable implements IResultSetPrinter{
 		.mapToObj(item -> getColumnMetadata(resultSet, item))
 		.collect(Collectors.toList());
 
+		int maxLength = columns.stream().mapToInt(Tuple3::_3).max().orElse(0) + 3;
 		int recordNumber=0;
 		while (resultSet.next()) {
 			this.outputSink.writeLine(buildLine(++recordNumber));
 			columns.forEach(column -> {
-				this.outputSink.writeLine(buildRecordLine(column, IPrintFormatter.formatter(this.formatters, resultSet, column._1, "NULL")));
+				this.outputSink.writeLine(buildRecordLine(column, maxLength, IPrintFormatter.formatter(this.formatters, resultSet, column._1, "NULL")));
 			});
 		}
 		this.outputSink.printInfo(recordNumber + " row in set ("+ queryTime +" ms)");
@@ -62,7 +63,8 @@ public class ResultPrinterPivotTable implements IResultSetPrinter{
 			throw new IllegalArgumentException("invalid index: " + index, e);
 		}
 	}
-	public String buildRecordLine(Tuple3<Integer, String, Integer> column, String value) {
-		return StringUtils.leftPad(" " + column._2, column._3, " ") + " : " + value;
+	public String buildRecordLine(Tuple3<Integer, String, Integer> column, Integer leftColumnLength, String value) {
+		
+		return StringUtils.leftPad(" " + column._2, leftColumnLength, " ") + " : " + value;
 	}
 }

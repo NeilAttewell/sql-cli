@@ -38,10 +38,7 @@ public class InputExecutorExit extends AbstractCommandExecutor{
 				throw new ExitException();
 			}
 
-			if(this.state.getUpdateCount() > 0) {
-				this.outputSink.printInfo("You have " + this.state.getUpdateCount() + " uncommited updates/inserts/deletes in this transaction.");
-				this.outputSink.printInfo("Auto commiting your transaction");
-			}
+			this.outputSink.printInfo("Auto commiting your transaction");
 			this.connection.commit();
 			this.connection.close();
 			throw new ExitException();

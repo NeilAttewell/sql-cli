@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 
 import sqlclient.cli.sources.console.MultilineParser;
 import sqlclient.cli.sources.console.QueryOnlyHistory;
+import sqlclient.cli.z_boot.SqlClientApplication;
 import sqlclient.core.util.cli.CommandLine;
 import sqlclient.core.util.cli.CommandLineBuilder;
 import sqlclient.core.util.cli.CommandLineOption;
@@ -25,8 +26,10 @@ import sqlclient.core.util.cli.CommandLineOption;
  */
 @Configuration
 public class ConsoleConfiguration {
-	@Autowired private CommandLine commandLine;
-	
+	@Bean
+	public CommandLine commandLine() {
+		return SqlClientApplication.getCommandLine();
+	}
 	@Bean
 	@Profile("in_console")
 	public MultilineParser consoleParser() {
@@ -51,7 +54,7 @@ public class ConsoleConfiguration {
 				.parser(consoleParser());
 		
 		
-		String historyFile = this.commandLine.getValue("history-file");
+		String historyFile = commandLine().getValue("history-file");
 		if(StringUtils.isNotBlank(historyFile)) {
 			File file = new File(historyFile);
 			if(!file.exists()) {

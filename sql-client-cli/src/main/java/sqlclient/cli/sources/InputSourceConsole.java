@@ -35,12 +35,7 @@ public class InputSourceConsole extends AbstractInputSource{
 		try {
 			StringBuilder builder = new StringBuilder();
 			builder.append(StringUtils.defaultIfBlank(this.state.getInputPromptPrefix(), this.dbType + " SQL"));
-			builder.append(" ");
-			if(!this.state.isAutoCommit()) {
-				builder.append(StringUtils.rightPad(" #" + this.state.getUpdateCount(), 5, " "));
-			}
-			builder.append(this.state.isAutoCommit() ? StringUtils.rightPad(" #" + this.state.getUpdateCount(), 5, " ") : "");
-			builder.append("> ");
+			builder.append(this.state.isAutoCommit() ? " (auto) > ": " > ");
 			
 			return Tuple.of(this.lineReader.readLine(builder.toString()), true);
 		}catch (EndOfFileException|UserInterruptException e) {

@@ -29,6 +29,11 @@ public class VariableStoreLastQueryResult implements IVariableStore{
 		return this.variables.get(name);
 	}
 	@Override
+	public void remove(String name) {
+		name = StringUtils.upperCase(StringUtils.trimToEmpty(name));
+		this.variables.remove(name);
+	}
+	@Override
 	public List<String> getNames(){
 		return this.variables.keySet().stream()
 				.sorted()

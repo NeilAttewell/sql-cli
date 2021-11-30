@@ -57,12 +57,12 @@ public abstract class AbstractInputSource implements IInputSource{
 				List<QueryPart> parts = new ArrayList<>();
 				parts.addAll(this.partialQuery.getParts());
 				parts.addAll(query.getParts());
-				this.queries.add(new Query(parts, query.getDelimiter()));
+				this.queries.add(new Query(parts, query.getDelimiter(), query.isPartOfMultiQuery()));
 				this.partialQuery=null;
 				continue;
 			}
 			if(i == queries.size()-1 && StringUtils.isBlank(query.getDelimiter()) && !isComplete(query)) {
-				this.partialQuery=new Query(query.getParts(), this.registry.getPrimaryDelimiter());
+				this.partialQuery=new Query(query.getParts(), this.registry.getPrimaryDelimiter(), query.isPartOfMultiQuery());
 				continue;
 			}
 			this.queries.add(query);

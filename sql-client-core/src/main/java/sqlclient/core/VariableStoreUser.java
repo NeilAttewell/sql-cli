@@ -55,6 +55,11 @@ public class VariableStoreUser implements IVariableStore{
 		this.variables.put(name, StringUtils.trimToEmpty(value));
 	}
 	@Override
+	public void remove(String name) {
+		name = StringUtils.upperCase(StringUtils.trimToEmpty(name));
+		this.variables.remove(name);
+	}
+	@Override
 	public String get(String name) {
 		name = StringUtils.upperCase(StringUtils.trimToEmpty(name));
 		return this.variables.get(name);
