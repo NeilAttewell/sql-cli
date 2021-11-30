@@ -40,6 +40,9 @@ public class Application {
 					this.outputSink.writeLine(query.getQuery().replaceAll("(?:\\n|\\r)", " "));
 				}
 				for(Query item : expand(query)) {
+					if(StringUtils.isBlank(item.getQuery())) {
+						continue;
+					}
 					findExecutor(item).execute(item);
 				}
 			}catch (SQLException e) {
