@@ -75,7 +75,7 @@ public class OracleConnectionConfiguration {
 		connection.setAutoCommit(this.state.isAutoCommit());
 
 		this.sink.printInfo("Connection to Oracle established.  Took: " + (System.currentTimeMillis()-startTime) + ".  Auto Commit is " + (this.state.isAutoCommit() ? "Enabled" : "Disabled"));
-		this.aliasRegistry.addFixedAlias(this.characterRegistry, "show tables", "select table_name from user_tables order by 1");
+		this.aliasRegistry.addInitialAlias(this.characterRegistry, "show tables", "select table_name from user_tables order by 1");
 		return connection;
 	}
 	public static void addCommandLineArguments(CommandLineBuilder builder){

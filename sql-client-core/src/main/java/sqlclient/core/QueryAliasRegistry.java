@@ -3,10 +3,7 @@ package sqlclient.core;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,14 +25,19 @@ import sqlclient.core.util.cli.CommandLine;
  */
 @Component
 public class QueryAliasRegistry {
+
 	@Autowired private CommandLine commandLine;
 	@Autowired private SpecialCharacterRegistry characterRegistry;
-	private Map<String, Tuple2<String, List<Query>>> fixedAliases = new HashMap<>();
-	private Map<String, Tuple2<String, List<Query>>> aliases = new HashMap<>();
+	private Map<String, Tuple2<String, List<Query>>> aliasMapInitial = new HashMap<>();
+	private Map<String, Tuple2<String, List<Query>>> aliasMapLoaded = new HashMap<>();
+	private Map<String, Tuple2<String, List<Query>>> aliasMapSession = new HashMap<>();
 
 	@PostConstruct
 	public void loadAliases() throws IOException {
-		String fileName = this.commandLine.getValue("alias");
+		loadAliasesFromFile("~/.sql-client/alias-default.txt");
+		loadAliasesFromFile(this.commandLine.getValue("alias"));
+	}
+	private void loadAliasesFromFile(String fileName) throws IOException{
 		if(StringUtils.isBlank(fileName)) {
 			return;
 		}
@@ -44,8 +46,7 @@ public class QueryAliasRegistry {
 		if(!file.isFile()) {
 			return;
 		}
-
-		Map<String, List<String>> map = new HashMap<>();
+		var map = new HashMap<String, List<String>>();
 
 		List<String> currentAliasLines=null;
 		for(String line : FileUtils.readLines(file,Charset.defaultCharset())) {
@@ -64,22 +65,24 @@ public class QueryAliasRegistry {
 		}
 
 		map.entrySet().stream()
-		.filter(item -> !item.getValue().isEmpty())
-		.map(item -> Tuple.of(item.getKey(), StringUtils.join(item.getValue(), " ")))
-		.forEach(item -> addFixedAlias(this.characterRegistry, item._1, item._2));
-	} 
+				.filter(item -> !item.getValue().isEmpty())
+				.map(item -> Tuple.of(item.getKey(), StringUtils.join(item.getValue(), " ")))
+				.forEach(item -> addAlias(this.aliasMapLoaded, this.characterRegistry, item._1, item._2));
+	}
 
-	public void addFixedAlias(SpecialCharacterRegistry characterRegistry, String alias, String queryString) {
-		List<Query> queries = SqlParserUtils.parse(queryString, characterRegistry);
-		this.fixedAliases.put(alias.toLowerCase(), Tuple.of(alias, queries));
+	private void addAlias(Map<String, Tuple2<String, List<Query>>> map, SpecialCharacterRegistry characterRegistry, String alias, String queryString){
+		map.put(alias.toLowerCase(), Tuple.of(alias, SqlParserUtils.parse(queryString, characterRegistry)));
+	}
+
+	public void addInitialAlias(SpecialCharacterRegistry characterRegistry, String alias, String queryString) {
+		addAlias(this.aliasMapInitial, this.characterRegistry, alias, queryString);
 	}
 
 	public List<String> getAliasNames(){
-		return Stream.of(this.fixedAliases, this.aliases)
-				.map(item -> item.values())
-				.flatMap(item -> item.stream())
-				.map(item -> item._1)
+		return Stream.of(this.aliasMapInitial, this.aliasMapLoaded, this.aliasMapSession)
+				.flatMap(item -> item.keySet().stream())
 				.distinct()
+				.sorted()
 				.collect(Collectors.toList());
 	}
 	public List<Query> getAlias(String input, String delimiter) {
@@ -101,11 +104,16 @@ public class QueryAliasRegistry {
 	}
 	private List<Query> getAlias(String input) {
 		input = StringUtils.trimToEmpty(StringUtils.lowerCase(input));
-		var alias = this.aliases.get(input);
+
+		var alias = this.aliasMapSession.get(input);
 		if(alias != null) {
 			return alias._2;
 		}
-		alias = this.fixedAliases.get(input);
+		alias = this.aliasMapLoaded.get(input);
+		if(alias != null) {
+			return alias._2;
+		}
+		alias = this.aliasMapInitial.get(input);
 		if(alias != null) {
 			return alias._2;
 		}
@@ -113,11 +121,10 @@ public class QueryAliasRegistry {
 	}
 
 	public void setAlias(String name, String queryString) {
-		List<Query> queries = SqlParserUtils.parse(queryString, this.characterRegistry);
-		this.aliases.put(name.toLowerCase(), Tuple.of(name, queries));
+		addAlias(this.aliasMapSession, this.characterRegistry, name, queryString);
 	}
 
 	public void removeAlias(String name) {
-		this.aliases.remove(name.toLowerCase());
+		this.aliasMapSession.remove(name.toLowerCase());
 	}
 }
