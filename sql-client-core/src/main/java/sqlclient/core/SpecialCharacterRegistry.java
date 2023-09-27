@@ -11,7 +11,7 @@ public class SpecialCharacterRegistry {
 	private char escapeCharacter = '\\';
 	private String primaryDelimiter = ";";
 	private String cancelDelimiter = "\\c";
-	private String[] secondartDelimiters = new String[] {"\\g","\\j"};
+	private String[] secondartDelimiters = new String[] {"\\G","\\j"};
 
 	public String[] getWrapperStrings() {
 		return wrapperStrings;

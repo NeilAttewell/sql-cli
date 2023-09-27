@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public enum DisplayTypeEnum {
 	Table(true, ";"),
-	PivotTable(false, "\\g"),
+	PivotTable(false, "\\G"),
 	Json(false, "\\j");
 	
 	private final boolean isDefault;
